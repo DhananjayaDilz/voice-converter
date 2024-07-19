@@ -12,6 +12,8 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.24.7",
     "@babel/runtime": "^7.24.8",
+    "@material-tailwind/react": "^2.1.9",
+    "jspdf": "^2.5.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-speech-recognition": "^3.10.0"
