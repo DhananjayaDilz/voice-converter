@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import multer from 'multer';
 import cors from "cors";
 import notes from "./model/notesModel.js";
+import route from "./routes/pdfRouts.js";
 
 const app = express();
 app.use(bodyParser.json());
