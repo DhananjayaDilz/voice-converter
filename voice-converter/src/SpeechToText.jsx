@@ -1,12 +1,30 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@material-tailwind/react";
 import { jsPDF } from "jspdf";
+import { FiDownload } from "react-icons/fi";
+
 
 const SpeechToText = () => {
     const [finalText, setFinalText] = useState('');
     const [interimText, setInterimText] = useState('');
     const [isListening, setIsListening] = useState(false);
+    const [pdfs, setPdfs] = useState([]);
     const recognitionRef = useRef(null);
+
+    useEffect(() => {
+        fetchPdfs();
+    }, []);
+
+    const fetchPdfs = async () => {
+        try {
+            const response = await fetch('http://localhost:3001/api/user/pdfs');
+            const data = await response.json();
+            console.log(data);
+            setPdfs(data);
+        } catch (error) {
+            console.error('Error fetching PDFs:', error);
+        }
+    };
 
     const handleListen = () => {
         if (!recognitionRef.current) {
@@ -56,6 +74,15 @@ const SpeechToText = () => {
         setInterimText('');
     };
 
+    const handleDownloadPDF = (base64String, fileName) => {
+        const link = document.createElement('a');
+        link.href = base64String;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     const handleSaveToPDF = async () => {
         const pdfName = prompt("Enter the name for the PDF file:");
         if (pdfName) {
@@ -77,6 +104,7 @@ const SpeechToText = () => {
                 });
                 if (response.ok) {
                     alert('PDF saved successfully!');
+                    fetchPdfs();  // Fetch the updated list of PDFs
                 } else {
                     alert('Failed to save PDF.');
                 }
@@ -117,7 +145,25 @@ const SpeechToText = () => {
                         Save to PDF
                     </Button>
                 </div>
+               
             </div>
+            <div className="mt-8 w-full max-w-4xl p-6 bg-white rounded-lg shadow-md">
+                    <h2 className="text-xl font-bold mb-4 text-center">Saved PDFs</h2>
+                    <ul>
+                        {pdfs.map((pdf) => (
+                            <div key={pdf._id} className="mb-2 flex items-center ">
+                                <div className='w-3/12 flex justify-between'>
+                                <p className='mr-7'>{pdf.name}</p>
+                                <Button  size="sm" variant="gradient" color="pink" 
+                                    onClick={() => handleDownloadPDF(`data:application/pdf;base64,${btoa(String.fromCharCode(...new Uint8Array(pdf.pdf.data)))}`, pdf.name)}>
+                                   <FiDownload/>
+                               
+                                </Button>
+                                </div>
+                            </div>
+                        ))}
+                    </ul>
+                </div>
         </div>
     );
 };

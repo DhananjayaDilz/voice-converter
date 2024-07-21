@@ -31,6 +31,12 @@ export const addNote= async(req,res)=>{
     }
 }
 
-export const uploadPDF= async(req,res)=>{
-    
+export const getPDFs= async(req,res)=>{
+    try {
+        const pdfs = await notes.find({});
+        res.status(200).json(pdfs);
+    } catch (error) {
+        res.status(500).json({error:"INTERNAL SERVER ERROR"})
+
+    }
 }
