@@ -23,7 +23,7 @@ mongoose.connect(MONGOURL).then(() => {
     });
 }).catch(error => console.log(error));
 
-const storage = multer.memoryStorage();
+{/*const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 app.post('/upload', upload.single('file'), async (req, res) => {
@@ -40,5 +40,6 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     }
 });
 
+*/}
 
 app.use("/api/user",route);

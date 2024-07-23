@@ -98,7 +98,7 @@ const SpeechToText = () => {
             formData.append('file', pdfBlob, `${pdfName}.pdf`);
 
             try {
-                const response = await fetch('http://localhost:3001/upload', {
+                const response = await fetch('http://localhost:3001/api/user/upload', {
                     method: 'POST',
                     body: formData,
                 });
